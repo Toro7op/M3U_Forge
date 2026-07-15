@@ -1,0 +1,120 @@
+:root {
+	--danger: #ff5656;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --accent: #569aff;
+    --accent-glow: rgba(86, 154, 255, 0.3);
+}
+.search-panel {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    z-index: 2000;
+    background: rgba(13, 17, 23, 0.7) !important;
+    backdrop-filter: blur(15px) saturate(160%);
+    -webkit-backdrop-filter: blur(15px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    padding: 10px 16px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px var(--glass-border);
+    cursor: move;
+    touch-action: none;
+    user-select: none;
+}
+.search-input {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    outline: none;
+    width: 140px;
+}
+.search-action {
+    background: var(--glass) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: white !important;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.2s ease !important;
+}
+.search-action:hover, .search-action:focus, .search-action:active {
+    background: var(--glass) !important;
+    color: var(--accent) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 12px var(--accent-glow) !important;
+    outline: none !important;
+}
+.cm-s-material-ocean .CodeMirror-selected, .cm-s-material-ocean .CodeMirror-focused .CodeMirror-selected, .cm-s-material-ocean .CodeMirror-line::selection, .cm-s-material-ocean .CodeMirror-line > span::selection, .CodeMirror-selected, .cm-searching { background: #56ff9a !important; color: #000 !important; opacity: 1 !important; }
+.cm-s-material-ocean .CodeMirror-line::selection, .cm-s-material-ocean .CodeMirror-line > span::selection,
+.CodeMirror-selected, .cm-searching, ::selection { background: #56ff9a !important; color: #000 !important; opacity: 1 !important; }
+.CodeMirror-selectedtext { color: #000 !important; }
+.cm-link { color: var(--accent) !important; text-decoration: underline !important; cursor: pointer; }
+.search-panel:focus-within { opacity: 1; box-shadow: 0 0 15px var(--accent-glow); }
+.search-input:focus { 
+    border-color: var(--accent) !important; 
+    background: var(--glass) !important;
+    box-shadow: 0 0 12px var(--accent-glow) !important;
+    outline: none !important;
+}
+.search-close {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 50% !important;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #64748b;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0 !important;
+    margin-left: 5px;
+    outline: none !important;
+}
+
+.search-close:hover {
+    background: rgba(255, 86, 86, 0.15) !important;
+    color: var(--danger) !important;
+    transform: rotate(-90deg) scale(1.1);
+    filter: drop-shadow(0 0 5px rgba(255, 86, 86, 0.6)); 
+}
+
+.search-close svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2.5px;
+}
+
+.search-highlight-active { background-color: #56ff9a !important; color: #000 !important; font-weight: bold; box-shadow: 0 0 10px #56ff9a; border-radius: 3px; z-index: 20; position: relative; }
+.match-highlight { background: rgba(86, 255, 154, 0.3) !important; border-bottom: 2px solid #56ff9a;; border-radius: 2px; transition: background 0.2s; color: #fff !important; }
+.match-count-floating { position: fixed; background: var(--accent); color: white; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 8px; pointer-events: none; z-index: 9999; box-shadow: 0 5px 15px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); transform: translateX(-50%); white-space: nowrap; opacity: 0.95; transition: opacity 0.2s ease-out; }
+
+.btn-press:active {
+    transform: translateY(2px) !important;
+    filter: brightness(0.8);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.4) !important;
+}
+
+#priority-panel, #tags-modal-overlay {
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px var(--glass-border);
+}
+
+#tags-checkbox-container label {
+    word-break: break-all;
+    transition: all 0.2s ease;
+}
+
+
+
+
+

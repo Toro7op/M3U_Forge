@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <title>M3U Forge</title>
+    <link rel="icon" type="image/png" href="/icon.png">
+    <meta name="theme-color" content="#569aff">
+    <link rel="stylesheet" href="codemirror/codemirror.min.css">
+    <link rel="stylesheet" href="codemirror/material-ocean.min.css">
+    <link rel="stylesheet" href="codemirror/dialog.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="search.css">
+    <link rel="stylesheet" href="notifications.css">
+</head>
+<body>  
+    <nav class="system-menu">
+        <div class="menu-item-container">
+            <div class="menu-label" onmouseenter="toggleSystemMenu(this, event)">Файл</div>
+            <div class="submenu">
+                <div class="submenu-item" onclick="handleOpenFile()">Открыть...</div>
+                <div class="submenu-item" onclick="handleLoadUrl()">Открыть по URL...</div>
+                <div class="win-separator"></div>
+                <div class="submenu-item" onclick="handleFileExport()">Сохранить как...</div>
+                <div class="win-separator"></div>
+                <div class="submenu-item" onclick="clearEditor()">Очистить</div>
+            </div>
+        </div>
+		
+		<div class="menu-item-container">
+            <div class="menu-label" onmouseenter="toggleSystemMenu(this, event)">Правка</div>
+            <div class="submenu">
+                <div class="submenu-item" onclick="editor.undo()">Отменить <span class="hotkey">Ctrl+Z</span></div>
+                <div class="submenu-item" onclick="editor.redo()">Повторить <span class="hotkey">Ctrl+Y</span></div>
+                <div class="win-separator"></div>
+                <div class="submenu-item keep-open" style="display: flex; align-items: center; gap: 8px;"
+                    onclick="runViewAction('sep', event)">
+                    <input type="checkbox" id="sepLinesCheck" style="pointer-events: none;">
+                    <span>Пустая строка между каналами</span>
+                </div>
+                <div class="win-separator"></div>
+                <div class="submenu-item" onclick="removeDupByUrl()">Удалить дубликаты (по URL)</div>
+                <div class="submenu-item" onclick="removeDupByName()">Удалить дубликаты (по имени)</div>
+                <div class="win-separator"></div>
+                <div class="submenu-item" onclick="removeAllSD()">Удалить все SD каналы</div>
+                <div class="submenu-item" onclick="keepSmartHD()">Оставить лучшее качество</div>
+            </div>
+        </div>
+		
+		<div class="menu-item-container">
+            <div class="menu-label" onmouseenter="toggleSystemMenu(this, event)">Сортировка</div>
+            <div class="submenu">
+                <div class="submenu-item has-nested">
+                    Естественная сортировка <span class="win-arrow">›</span>
+                    <div class="nested-submenu">
+                        <div class="submenu-item" onclick="runQuickSort(false)">По возрастанию алфавита</div>
+                        <div class="submenu-item" onclick="runQuickSort(true)">По убыванию алфавита</div>
+                        <div class="win-separator"></div>
+                        <div class="submenu-item" onclick="runGroupSort(false)">Группы по возрастанию</div>
+                        <div class="submenu-item" onclick="runGroupSort(true)">Группы по убыванию</div>
+                        <div class="win-separator"></div>
+                        <div class="submenu-item" onclick="runUrlSort(false)">URL по возрастанию</div>
+                        <div class="submenu-item" onclick="runUrlSort(true)">URL по убыванию</div>
+                        <div class="win-separator"></div>
+                        <div class="submenu-item" onclick="runPrioritySort()">По приоритету групп</div>
+                    </div>
+                </div>
+                <div class="submenu-item has-nested">
+                    Сортировка по имени <span class="win-arrow">›</span>
+                    <div class="nested-submenu">
+                        <div class="submenu-item" onclick="runLexSort(false)">По возрастанию алфавита</div>
+                        <div class="submenu-item" onclick="runLexSort(true)">По убыванию алфавита</div>
+                        <div class="win-separator"></div>
+                        <div class="submenu-item" onclick="runLexGroupSort(false)">Группы по возрастанию</div>
+                        <div class="submenu-item" onclick="runLexGroupSort(true)">Группы по убыванию</div>
+                        <div class="win-separator"></div>
+                        <div class="submenu-item" onclick="runLexUrlSort(false)">URL по возрастанию</div>
+                        <div class="submenu-item" onclick="runLexUrlSort(true)">URL по убыванию</div>
+                        <div class="win-separator"></div>
+                        <div class="submenu-item" onclick="runLexPrioritySort()">По приоритету групп</div>
+                    </div>
+                </div>
+                <div class="win-separator"></div>
+                <div class="submenu-item" onclick="openPriority()">Настроить конфигурацию</div>
+            </div>
+        </div>
+		
+		<div class="menu-item-container">
+            <div class="menu-label" onmouseenter="toggleSystemMenu(this, event)">Конвертер</div>
+            <div class="submenu">
+                <div class="submenu-item has-nested">
+                    DRM KEY <span class="win-arrow">›</span>
+                    <div class="nested-submenu">
+                        <div class="submenu-item" onclick="runQuickDRM('KID:KEY')">Формат KID:KEY</div>
+                        <div class="submenu-item" onclick="runQuickDRM('{KID:KEY}')">Формат {KID:KEY}</div>
+                        <div class="submenu-item" onclick="runQuickDRM('{\&quot;KID\&quot;:\&quot;KEY\&quot;}')">Формат {"KID":"KEY"}</div>
+                        <div class="submenu-item" onclick="runQuickDRM('Hex:Base64')">Формат HEX : BASE64</div>
+                        <div class="submenu-item" onclick="runQuickDRM('Base64')">Формат BASE64</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+		<div class="menu-item-container">
+            <div class="menu-label" onmouseenter="toggleSystemMenu(this, event)">Теги</div>
+            <div class="submenu">
+                <div class="submenu-item" onclick="openAttributeEditor()">Удалить атрибуты...</div>
+                <div class="submenu-item" onclick="openTagLineEditor()">Удалить теги (строки)...</div>
+                <div class="win-separator"></div>
+                <div class="submenu-item" onclick="runTagFormat(true)">Разделение на строки (Split)</div>
+                <div class="submenu-item" onclick="runTagFormat(false)">Слияние в одну строку (Merge)</div>
+            </div>
+        </div>
+		
+        <div class="menu-item-container" style="margin-left: auto;">
+            <div class="menu-label" onmouseenter="toggleSystemMenu(this, event)">Справка</div>
+            <div class="submenu" style="left: auto; right: 0;">
+                <div class="submenu-item has-nested">
+                    О программе <span class="win-arrow">›</span>
+                    <div class="nested-submenu" style="left: auto; right: 100%; min-width: 250px; padding: 12px 16px; font-family: 'Segoe UI', sans-serif;">
+                        <div style="font-weight: bold; color: var(--accent); font-size: 14px; margin-bottom: 4px;">M3U Forge Tool</div>
+                        <div style="font-size: 11px; color: #8b949e; margin-bottom: 8px;">Версия 1.4.9.1</div>
+                        <div class="win-separator" style="margin: 6px 0;"></div>
+                        <div style="font-size: 11px; color: #cccccc; line-height: 1.4; white-space: normal;">
+                            Инструмент для работы с IPTV-плейлистами. Быстро и без лишнего мусора.
+                        </div>
+                        <div class="win-separator" style="margin: 6px 0;"></div>
+                        <div style="font-size: 11px; color: #8b949e; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span>Автор: <a href="https://t.me/Toro7op" target="_blank" class="cm-link" style="font-weight: bold;">Toro7op</a></span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;">
+                                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                                <line x1="6" y1="1" x2="6" y2="4"></line>
+                                <line x1="10" y1="1" x2="10" y2="4"></line>
+                                <line x1="14" y1="1" x2="14" y2="4"></line>
+                            </svg>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: center; background: #ffffff; padding: 8px; border-radius: 10px; margin: 8px 0; border: 1px solid var(--glass-border);">
+                            <img src="qrCode.png" alt="Cloudtips QR" style="width: 140px; height: 140px; display: block;">
+                        </div>
+
+                        <div class="win-separator" style="margin: 8px 0 10px 0;"></div>
+                        <a href="https://pay.cloudtips.ru/p/42634c02" target="_blank" class="search-action btn-press" 
+                           style="display: block; text-align: center; text-decoration: none; padding: 8px; border-radius: 8px; font-size: 11px; letter-spacing: 0.5px; box-sizing: border-box; color: var(--accent) !important; border-color: rgba(86, 154, 255, 0.3) !important; box-shadow: 0 0 12px var(--accent-glow) !important;">
+                            ПОДДЕРЖАТЬ ПРОЕКТ
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+	
+    <div id="editor-container"></div>
+    
+	<div id="toast-container" class="toast-container"></div>
+    <div id="modal-overlay" class="custom-confirm-overlay" style="display:none;">
+        <div class="custom-confirm-card">
+            <div id="modal-title" class="custom-confirm-title">Уведомление</div>
+            <div id="modal-text" class="custom-confirm-text">Вы уверены?</div>
+            <div id="modal-input-container" style="display:none; margin-bottom: 20px;">
+                <input type="text" id="modal-input" placeholder="Введите значение..."
+                    style="width:100%; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); color:white; padding:12px; border-radius:10px; outline:none; font-size:14px; box-sizing:border-box;">
+            </div>
+            <div class="custom-confirm-buttons">
+                <button onclick="closeGlobalModal()"
+                    style="background:transparent; color:#8b949e; border:none; cursor:pointer; font-weight:600; padding:10px 15px;">ОТМЕНА</button>
+                <button id="modal-action-btn"
+                    style="background:var(--accent); color:white; border:none; padding:10px 24px; border-radius:10px; cursor:pointer; font-weight:700; box-shadow: 0 4px 15px rgba(86,154,255,0.3);">ОК</button>
+            </div>
+        </div>
+    </div>
+	
+    <input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(event)">
+
+    <script src="codemirror/codemirror.min.js"></script>
+    <script src="codemirror/searchcursor.min.js"></script>
+    <script src="codemirror/search.min.js"></script>
+    <script src="codemirror/overlay.min.js"></script>
+
+    <script src="js/editor_core.js"></script>
+    <script src="js/drawer_ui.js"></script>
+	<script src="js/view.js"></script>
+    <script src="js/file_ops.js"></script>
+	
+    
+    <script src="wasm_exec.js"></script>
+    <script>
+        const go = new Go();
+        WebAssembly.instantiateStreaming(
+            fetch("m3uforge.wasm?v=" + new Date().getTime()), 
+            go.importObject
+        ).then((result) => {
+            go.run(result.instance);
+        }).catch((err) => {
+            console.error("[System Error] Init failed:", err);
+        });
+    </script>
+    <script src="js/converter.js"></script>
+	<script src="js/sort.js"></script>
+	<script src="js/cleaner.js"></script>
+	<script src="js/tag.js"></script>
+    <script src="js/tag_cleaner.js"></script>
+	
+	<div id="priority-panel" class="search-panel"
+        style="display:none; position: fixed; top: 100px; left: 50%; transform: translateX(-50%); width: 350px; flex-direction: column; cursor: default; padding: 0; overflow: hidden;">
+        <div id="priority-header"
+            style="position: relative; height: 40px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--glass-border); background: transparent;">
+            <span
+                style="font-size: 11px; text-transform: uppercase; color: #8b949e; font-weight: bold; letter-spacing: 0.5px; padding: 0 40px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                Конфигурация сортировки
+            </span>
+            <button class="search-close" onclick="closePriorityOnly()" type="button"
+                style="position: absolute; right: 0; top: 0; width: 40px; height: 100%; background: none; border: none; cursor: pointer; color: #8b949e; display: flex; align-items: center; justify-content: center; padding: 0;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div style="padding: 15px; display: flex; flex-direction: column; gap: 15px;">
+            <div>
+                <div
+                    style="font-size: 11px; color: var(--accent); font-weight: bold; display: block; margin-bottom: 5px;">
+                    ПРИОРИТЕТ ГРУПП
+                </div>
+                <div id="groupOrderContainer"
+                    style="max-height: 150px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 8px; border: 1px solid var(--glass-border);">
+                </div>
+                <button class="search-action btn-press" onclick="SortModule.createItem()" type="button"
+                    style="width: 100%; margin-top: 5px;">+ ДОБАВИТЬ ГРУППУ</button>
+        </div>
+        <div>
+            <label for="blacklistInput" style="font-size: 11px; color: #888; display: block; margin-bottom: 5px;">ЧЕРНЫЙ
+                СПИСОК</label>
+            <textarea id="blacklistInput" class="search-input" placeholder="Adult, Test, Garbage..."
+                style="width: 100%; height: 40px; resize: vertical; box-sizing: border-box;"></textarea>
+        </div>
+        <div>
+            <label for="noSortInput" style="font-size: 11px; color: #888; display: block; margin-bottom: 5px;">НЕ
+                СОРТИРОВАТЬ ВНУТРИ ГРУППЫ</label>
+            <textarea id="noSortInput" class="search-input" placeholder="Favorites, Kids..."
+                style="width: 100%; height: 40px; resize: vertical; box-sizing: border-box;"></textarea>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="search-action btn-press" onclick="exportSortConfig()" type="button"
+                style="flex: 1;">ЭКСПОРТ</button>
+            <button class="search-action btn-press" onclick="document.getElementById('cfgFileInput').click()"
+                type="button" style="flex: 1;">ИМПОРТ</button>
+            <button class="search-action btn-press" onclick="saveAndClosePriority()" type="button"
+                style="flex: 1.5; color: var(--accent) !important; border-color: var(--accent) !important; box-shadow: 0 0 12px var(--accent-glow) !important;">СОХРАНИТЬ</button>
+        </div>
+        <input type="file" id="cfgFileInput" style="display:none" accept=".json" onchange="importSortConfig(this)">
+    </div>
+    </div>
+	
+	<div id="tags-modal-overlay" class="search-panel"
+        style="display:none; position: fixed; top: 120px; left: 50%; transform: translateX(-50%); width: 400px; flex-direction: column; cursor: default; padding: 12px 16px;">
+        <div id="tags-header"
+            style="display: flex; justify-content: space-between; align-items: center; width: 100%; cursor: move; border-bottom: 1px solid var(--glass-border); padding-bottom: 8px; margin-bottom: 5px;">
+            <span id="tags-panel-title"
+                style="font-size: 11px; text-transform: uppercase; color: #8b949e; font-weight: bold; letter-spacing: 0.5px;">Редактор
+                тегов</span>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <label
+                    style="font-size: 10px; color: var(--accent); cursor: pointer; font-weight: bold; text-transform: uppercase;">
+                    <input type="checkbox" id="selectAllTags" onchange="toggleAllTags(this)" style="display:none;">
+                    Выбрать все
+                </label>
+                <button class="search-close" onclick="closeTagsModal()" type="button">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="tags-checkbox-container"
+            style="width: 100%; max-height: 300px; min-height: 50px; overflow-y: auto; margin: 10px 0; display: flex; flex-direction: column; gap: 4px; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 5px;">
+        </div>
+        <div
+            style="width: 100%; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--glass-border); padding-top: 12px; margin-top: 5px;">
+            <button onclick="closeTagsModal()" class="search-action btn-press" type="button">ЗАКРЫТЬ</button>
+            <button id="tags-apply-btn" class="search-action btn-press" type="button"
+                style="color: var(--danger) !important; border-color: var(--danger) !important; box-shadow: 0 0 12px rgba(255, 86, 86, 0.2) !important;">
+                УДАЛИТЬ
+            </button>
+        </div>
+    </div>
+	
+	<div id="status-bar" class="status-bar-panel">
+        <div class="status-item">
+            <span class="status-label">КАНАЛОВ:</span>
+            <span id="status-channels-count" class="status-value">0</span>
+        </div>
+        <div class="status-separator"></div>
+        <div class="status-item">
+            <span class="status-label">УНИКАЛЬНЫХ ГРУПП:</span>
+            <span id="status-groups-count" class="status-value">0</span>
+        </div>
+        <div class="status-separator"></div>
+        <div class="status-item" style="margin-left: auto;">
+            <span id="status-playlist-type" class="status-value" style="color: var(--accent);">M3U Forge PLAYLIST</span>
+        </div>
+    </div>
+	
+</body>
+</html>
