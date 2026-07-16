@@ -48,6 +48,14 @@
         </div>
 		
 		<div class="menu-item-container">
+            <div class="menu-label" onmouseenter="toggleSystemMenu(this, event)">Поиск</div>
+            <div class="submenu">
+                <div class="submenu-item" onclick="openSearch()">Найти и заменить <span class="hotkey">Ctrl+F</span>
+                </div>
+            </div>
+        </div>
+		
+		<div class="menu-item-container">
             <div class="menu-label" onmouseenter="toggleSystemMenu(this, event)">Сортировка</div>
             <div class="submenu">
                 <div class="submenu-item has-nested">
@@ -153,6 +161,21 @@
 	
     <div id="editor-container"></div>
     
+	<div id="search-bar" class="search-panel" style="display:none; position: fixed; top: 70px; right: 20px;">
+        <input type="text" id="searchInput" class="search-input" placeholder="Найти...">
+        <button class="search-action btn-press" onclick="findNext()">НАЙТИ</button>
+        <input type="text" id="replaceInput" class="search-input" placeholder="Заменить на...">
+        <button class="search-action btn-press" onclick="replaceOne()">ЗАМЕНИТЬ</button>
+        <button class="search-action btn-press" onclick="replaceAll()">ВСЁ</button>
+        <button class="search-close" onclick="closeSearch()" title="Закрыть (Esc)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+	
 	<div id="toast-container" class="toast-container"></div>
     <div id="modal-overlay" class="custom-confirm-overlay" style="display:none;">
         <div class="custom-confirm-card">
@@ -182,7 +205,7 @@
     <script src="js/drawer_ui.js"></script>
 	<script src="js/view.js"></script>
     <script src="js/file_ops.js"></script>
-	
+	<script src="js/search_module.js"></script>
     
     <script src="wasm_exec.js"></script>
     <script>
