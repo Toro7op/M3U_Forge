@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <title>M3U Forge</title>
-    <link rel="icon" type="image/png" href="/icon.png">
+    <link rel="icon" type="image/png" href="icon.png">
     <meta name="theme-color" content="#569aff">
     <link rel="stylesheet" href="codemirror/codemirror.min.css">
     <link rel="stylesheet" href="codemirror/material-ocean.min.css">
@@ -33,12 +33,6 @@
                 <div class="submenu-item" onclick="editor.undo()">Отменить <span class="hotkey">Ctrl+Z</span></div>
                 <div class="submenu-item" onclick="editor.redo()">Повторить <span class="hotkey">Ctrl+Y</span></div>
                 <div class="win-separator"></div>
-                <div class="submenu-item keep-open" style="display: flex; align-items: center; gap: 8px;"
-                    onclick="runViewAction('sep', event)">
-                    <input type="checkbox" id="sepLinesCheck" style="pointer-events: none;">
-                    <span>Пустая строка между каналами</span>
-                </div>
-                <div class="win-separator"></div>
                 <div class="submenu-item" onclick="removeDupByUrl()">Удалить дубликаты (по URL)</div>
                 <div class="submenu-item" onclick="removeDupByName()">Удалить дубликаты (по имени)</div>
                 <div class="win-separator"></div>
@@ -51,6 +45,22 @@
             <div class="menu-label" onmouseenter="toggleSystemMenu(this, event)">Поиск</div>
             <div class="submenu">
                 <div class="submenu-item" onclick="openSearch()">Найти и заменить <span class="hotkey">Ctrl+F</span>
+                </div>
+            </div>
+        </div>
+		
+		<div class="menu-item-container">
+            <div class="menu-label" onmouseenter="toggleSystemMenu(this, event)">Вид</div>
+            <div class="submenu">
+                <div class="submenu-item keep-open" style="display: flex; align-items: center; gap: 8px;"
+                    onclick="runViewAction('sep', event)">
+                    <input type="checkbox" id="sepLinesCheck" style="pointer-events: none;">
+                    <span>Пустая строка между каналами</span>
+                </div>
+				<div class="win-separator"></div>
+                <div class="submenu-item keep-open" style="display: flex; align-items: center; gap: 8px;" onclick="toggleLineWrapping(event)">
+                    <input type="checkbox" id="lineWrappingCheck" style="pointer-events: none;">
+                    <span>Перенос строк</span>
                 </div>
             </div>
         </div>
@@ -128,7 +138,7 @@
                     О программе <span class="win-arrow">›</span>
                     <div class="nested-submenu" style="left: auto; right: 100%; min-width: 250px; padding: 12px 16px; font-family: 'Segoe UI', sans-serif;">
                         <div style="font-weight: bold; color: var(--accent); font-size: 14px; margin-bottom: 4px;">M3U Forge Tool</div>
-                        <div style="font-size: 11px; color: #8b949e; margin-bottom: 8px;">Версия 1.5.0</div>
+                        <div style="font-size: 11px; color: #8b949e; margin-bottom: 8px;">Версия 1.5.1</div>
                         <div class="win-separator" style="margin: 6px 0;"></div>
                         <div style="font-size: 11px; color: #cccccc; line-height: 1.4; white-space: normal;">
                             Инструмент для работы с IPTV-плейлистами. Быстро и без лишнего мусора.
@@ -222,6 +232,7 @@
     </script>
     <script src="js/converter.js"></script>
 	<script src="js/simple.js"></script>
+	<script src="js/reverse_simple.js"></script>
 	<script src="js/sort.js"></script>
 	<script src="js/cleaner.js"></script>
 	<script src="js/tag.js"></script>
