@@ -99,3 +99,9 @@
     transform: translateY(-2px);
     transition: all 0.2s ease;
 }
+
+.cm-quality-4K { color: #ffd700 !important; font-weight: bold; }
+.cm-quality-FHD { color: #00ff7f !important; font-weight: bold; }
+.cm-quality-HD { color: #00c8ff !important; font-weight: bold; }
+.cm-quality-SD { color: #a0a0a0 !important; }                      
+.cm-quality-DEAD { color: #ff4a4a !important; font-weight: bold; }
