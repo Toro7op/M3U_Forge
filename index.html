@@ -38,6 +38,9 @@
                 <div class="win-separator"></div>
                 <div class="submenu-item" onclick="removeAllSD()">Удалить все SD каналы</div>
                 <div class="submenu-item" onclick="keepSmartHD()">Оставить лучшее качество</div>
+				<div class="win-separator"></div>
+				<div class="submenu-item" onclick="triggerGoPlaylistChecker()">Checker</div>
+				
             </div>
         </div>
 		
@@ -138,7 +141,6 @@
                     О программе <span class="win-arrow">›</span>
                     <div class="nested-submenu" style="left: auto; right: 100%; min-width: 250px; padding: 12px 16px; font-family: 'Segoe UI', sans-serif;">
                         <div style="font-weight: bold; color: var(--accent); font-size: 14px; margin-bottom: 4px;">M3U Forge Tool</div>
-                        <div style="font-size: 11px; color: #8b949e; margin-bottom: 8px;">Версия 1.5.2</div>
                         <div class="win-separator" style="margin: 6px 0;"></div>
                         <div style="font-size: 11px; color: #cccccc; line-height: 1.4; white-space: normal;">
                             Инструмент для работы с IPTV-плейлистами. Быстро и без лишнего мусора.
@@ -237,6 +239,7 @@
 	<script src="js/cleaner.js"></script>
 	<script src="js/tag.js"></script>
     <script src="js/tag_cleaner.js"></script>
+	<script src="js/checker.js"></script>
 	
 	<div id="priority-panel" class="search-panel"
         style="display:none; position: fixed; top: 100px; left: 50%; transform: translateX(-50%); width: 350px; flex-direction: column; cursor: default; padding: 0; overflow: hidden;">
@@ -327,20 +330,54 @@
     </div>
 	
 	<div id="status-bar" class="status-bar-panel">
+    <div class="status-item">
+        <span class="status-label">КАНАЛОВ:</span>
+        <span id="status-channels-count" class="status-value">0</span>
+    </div>
+    <div class="status-separator"></div>
+    <div class="status-item">
+        <span class="status-label">УНИКАЛЬНЫХ ГРУПП:</span>
+        <span id="status-groups-count" class="status-value">0</span>
+    </div>
+    
+    <div class="status-separator"></div>
+    <div class="status-item">
+        <span class="status-label" style="color: #ffd700;">4K:</span>
+        <span id="status-count-4k" class="status-value" style="color: #ffd700; font-weight: bold;">0</span>
+    </div>
+    <div class="status-separator"></div>
+    <div class="status-item">
+        <span class="status-label" style="color: #00ff7f;">FHD:</span>
+        <span id="status-count-fhd" class="status-value" style="color: #00ff7f; font-weight: bold;">0</span>
+    </div>
+    <div class="status-separator"></div>
+    <div class="status-item">
+        <span class="status-label" style="color: #00c8ff;">HD:</span>
+        <span id="status-count-hd" class="status-value" style="color: #00c8ff; font-weight: bold;">0</span>
+    </div>
+    <div class="status-separator"></div>
+    <div class="status-item">
+        <span class="status-label" style="color: #a0a0a0;">SD:</span>
+        <span id="status-count-sd" class="status-value" style="color: #a0a0a0;">0</span>
+    </div>
+
+    <div id="status-checker-wrapper" style="display: none; align-items: center; contents;">
+        <div class="status-separator"></div>
         <div class="status-item">
-            <span class="status-label">КАНАЛОВ:</span>
-            <span id="status-channels-count" class="status-value">0</span>
+            <span class="status-label" style="color: #ffd700;">ПРОВЕРКА:</span>
+            <span id="status-checker-progress" class="status-value" style="color: #ffd700; font-weight: bold;">0%</span>
         </div>
         <div class="status-separator"></div>
         <div class="status-item">
-            <span class="status-label">УНИКАЛЬНЫХ ГРУПП:</span>
-            <span id="status-groups-count" class="status-value">0</span>
-        </div>
-        <div class="status-separator"></div>
-        <div class="status-item" style="margin-left: auto;">
-            <span id="status-playlist-type" class="status-value" style="color: var(--accent);">M3U Forge PLAYLIST</span>
+            <span class="status-label">РАБОЧИЕ:</span>
+            <span id="status-checker-live" class="status-value" style="color: #00ff7f;">0</span>
         </div>
     </div>
-	
+
+    <div class="status-separator" style="margin-left: auto;"></div>
+    <div class="status-item">
+        <span id="status-playlist-type" class="status-value" style="color: var(--accent);">M3U Forge PLAYLIST</span>
+    </div>
+</div>
 </body>
 </html>
